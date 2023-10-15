@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 51523fb..3f006a3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -92,6 +92,7 @@ if (Qt5Core_FOUND AND NOT BUILD_WITH_QT6)
+   include_directories(${Qt5Core_INCLUDE_DIRS})
+ else()
+   find_package(Qt6 COMPONENTS Core REQUIRED)
++  qt6_standard_project_setup()
+   set(QTKEYCHAIN_VERSION_INFIX 6)
+ 
+ 
+@@ -201,7 +202,7 @@ set(qtkeychain_TR_FILES
+ )
+ 
+ set(QTKEYCHAIN_TARGET_NAME qt${QTKEYCHAIN_VERSION_INFIX}keychain)
+-add_library(${QTKEYCHAIN_TARGET_NAME} ${qtkeychain_SOURCES} ${qtkeychain_MOC_OUTFILES} ${qtkeychain_QM_FILES})
++qt6_add_library(${QTKEYCHAIN_TARGET_NAME} ${qtkeychain_SOURCES} ${qtkeychain_MOC_OUTFILES} ${qtkeychain_QM_FILES})
+ if(WIN32)
+     set_target_properties( ${QTKEYCHAIN_TARGET_NAME} PROPERTIES DEBUG_POSTFIX "d" )
+ endif()

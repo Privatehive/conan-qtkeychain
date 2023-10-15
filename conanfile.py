@@ -4,7 +4,7 @@
 import json, os
 from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain
-from conan.tools.files import copy, download
+from conan.tools.files import patch, copy, download
 from conan.tools.build import cross_building, build_jobs
 from conan.tools.env import VirtualBuildEnv
 from conan.tools.scm import Git
@@ -31,7 +31,7 @@ class QtKeychainConan(ConanFile):
     tool_requires = ["cmake/3.21.7", "ninja/1.11.1"]
     # ---Sources---
     exports = ["info.json"]
-    exports_sources = []
+    exports_sources = ["android_so_names.patch"]
     # ---Binary model---
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -43,6 +43,8 @@ class QtKeychainConan(ConanFile):
     def source(self):
         git = Git(self)
         git.run("clone https://github.com/frankosterfeld/qtkeychain.git --branch=%s --depth 1 --single-branch --no-tags --recurse-submodules --shallow-submodules --progress --jobs %u keychain" % (self.version, build_jobs(self)))
+        patch(self, base_path="keychain", patch_file="android_so_names.patch")
+
 
     def generate(self):
         ms = VirtualBuildEnv(self)
