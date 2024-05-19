@@ -1,5 +1,5 @@
 {
-  "version": "main",
+  "version": "0.14",
   "projectName": "qtkeychain",
   "projectDescription": "Platform-independent Qt API for storing passwords securely",
   "vendor": "Björn Stresing",

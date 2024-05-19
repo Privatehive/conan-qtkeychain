@@ -28,10 +28,10 @@ class QtKeychainConan(ConanFile):
     url = jsonInfo["repository"]
     # ---Requirements---
     requires = ["qt/[>=6.5.0]@%s/stable" % user]
-    tool_requires = ["cmake/3.21.7", "ninja/1.11.1"]
+    tool_requires = ["cmake/[>=3.21.7]", "ninja/[>=1.11.1]"]
     # ---Sources---
     exports = ["info.json"]
-    exports_sources = ["android_so_names.patch"]
+    exports_sources = ["patches/*"]
     # ---Binary model---
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -44,7 +44,7 @@ class QtKeychainConan(ConanFile):
     def source(self):
         git = Git(self)
         git.run("clone https://github.com/frankosterfeld/qtkeychain.git --branch=%s --depth 1 --single-branch --no-tags --recurse-submodules --shallow-submodules --progress --jobs %u keychain" % (self.version, build_jobs(self)))
-        patch(self, base_path="keychain", patch_file="android_so_names.patch")
+        patch(self, base_path="keychain", patch_file="patches/android_so_names.patch")
 
 
     def generate(self):
