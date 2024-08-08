@@ -51,7 +51,7 @@ class QtKeychainConan(ConanFile):
     def system_requirements(self):
         if self.settings.os == "Linux":
             apt = Apt(self)
-            pack_names = [""]
+            pack_names = ["libsecret-1-dev"]
             apt.install(pack_names, update=True)
 
     def configure(self):
