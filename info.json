@@ -4,7 +4,7 @@
   "projectDescription": "Platform-independent Qt API for storing passwords securely",
   "vendor": "Björn Stresing",
   "contact": "bjoern.stresing@gmx.de",
-  "domain": "com.github.tereius",
+  "domain": "de.privatehive",
   "copyrightYear": "2023",
   "repository": "https://github.com/Tereius/conan-qtkeychain",
   "topics": ["Qt", "QML", "secrets"],
