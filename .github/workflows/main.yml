@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build_linux:
-    name: "Build Linux"
+    name: "Linux"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
       image: "ghcr.io/privatehive/conan-ubuntu:latest"
@@ -11,7 +11,7 @@ jobs:
       conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
 
   build_windows:
-    name: "Build Windows"
+    name: "Windows"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
       image: "ghcr.io/privatehive/conan-wine:latest"
@@ -20,7 +20,7 @@ jobs:
       conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
 
   build_android:
-    name: "Build Android"
+    name: "Android"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
       image: "ghcr.io/privatehive/conan-ubuntu:latest"
