@@ -4,10 +4,8 @@
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration
 from conan.tools.cmake import CMake, CMakeToolchain
-from conan.tools.files import patch
-from conan.tools.build import build_jobs
+from conan.tools.files import patch, get
 from conan.tools.env import VirtualBuildEnv
-from conan.tools.scm import Git
 import json
 
 required_conan_version = ">=2.0"
@@ -38,20 +36,23 @@ class QtKeychainConan(ConanFile):
     default_options = {"shared": True,
                        "fPIC": True,
                        "qt/*:qtbase": True,
+                       "qt/*:dbus": True,
                        "qt/*:qttools": True,
+                       "qt/*:qtdbus": True,
                        "qt/*:qttranslations": True}
 
     def validate(self):
-        valid_os = ["Windows", "Linux"]
+        valid_os = ["Windows", "Linux", "Android"]
         if str(self.settings.os) not in valid_os:
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following operating systems: {valid_os}")
-        valid_arch = ["x86_64"]
+        valid_arch = ["x86_64", "x86", "armv7", "armv8"]
         if str(self.settings.arch) not in valid_arch:
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following architectures on {self.settings.os}: {valid_arch}")
 
     def source(self):
-        git = Git(self)
-        git.run("clone https://github.com/frankosterfeld/qtkeychain.git --branch=%s --depth 1 --single-branch --no-tags --recurse-submodules --shallow-submodules --progress --jobs %u keychain" % (self.version, build_jobs(self)))
+        #git = Git(self)
+        #git.run("clone https://github.com/frankosterfeld/qtkeychain.git --branch=%s --depth 1 --single-branch --no-tags --recurse-submodules --shallow-submodules --progress --jobs %u keychain" % (self.version, build_jobs(self)))
+        get(self, "https://github.com/frankosterfeld/qtkeychain/archive/refs/tags/%s.tar.gz" % self.version, destination="keychain", strip_root=True)
         patch(self, base_path="keychain", patch_file="patches/android_so_names.patch")
 
     def generate(self):
