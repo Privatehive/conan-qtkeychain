@@ -49,6 +49,8 @@ class QtKeychainConan(ConanFile):
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following architectures on {self.settings.os}: {valid_arch}")
         if self.settings.os == "Linux" and not self.dependencies["qt"].options.dbus:
             raise ConanInvalidConfiguration("qt dbus options is required")
+        if not self.dependencies["qt"].options.qtbase:
+            raise ConanInvalidConfiguration("qt qtbase option is required")
         if not self.dependencies["qt"].options.qttools:
             raise ConanInvalidConfiguration("qt qttools option is required")
         if not self.dependencies["qt"].options.qttranslations:
@@ -65,7 +67,7 @@ class QtKeychainConan(ConanFile):
             self.options["qt"].dbus = True
 
     def source(self):
-        get(self, "https://github.com/frankosterfeld/qtkeychain/archive/refs/tags/%s.tar.gz" % self.version, destination="keychain", strip_root=True)
+        get(self, **self.conan_data["sources"][self.version], destination="keychain", strip_root=True)
         patch(self, base_path="keychain", patch_file="patches/android_so_names.patch")
 
     def generate(self):

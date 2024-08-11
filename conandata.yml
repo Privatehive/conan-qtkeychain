@@ -1,0 +1,4 @@
+sources:
+  "0.14.3":
+    url: "https://github.com/frankosterfeld/qtkeychain/archive/refs/tags/0.14.3.tar.gz"
+    sha1: "d92ad4b28be5b0f0452699e45777d576ce95e3c0"
