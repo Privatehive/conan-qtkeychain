@@ -44,7 +44,7 @@ class QtKeychainConan(ConanFile):
         valid_os = ["Windows", "Linux", "Android"]
         if str(self.settings.os) not in valid_os:
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following operating systems: {valid_os}")
-        valid_arch = ["x86_64", "x86", "armv7", "armv8"]
+        valid_arch = ["x86_64", "x86", "armv6", "armv7", "armv8"]
         if str(self.settings.arch) not in valid_arch:
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following architectures on {self.settings.os}: {valid_arch}")
         if self.settings.os == "Linux" and not self.dependencies["qt"].options.dbus:
@@ -88,4 +88,5 @@ class QtKeychainConan(ConanFile):
         cmake.install()
 
     def package_info(self):
+        self.cpp_info.set_property("cmake_find_mode", "none")
         self.cpp_info.builddirs = ["lib/cmake"]
