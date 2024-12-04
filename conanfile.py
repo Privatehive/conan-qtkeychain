@@ -41,7 +41,7 @@ class QtKeychainConan(ConanFile):
                        "qt/*:qttranslations": True}
 
     def validate(self):
-        valid_os = ["Windows", "Linux", "Android"]
+        valid_os = ["Windows", "Linux", "Android", "Macos"]
         if str(self.settings.os) not in valid_os:
             raise ConanInvalidConfiguration(f"{self.name} {self.version} is only supported for the following operating systems: {valid_os}")
         valid_arch = ["x86_64", "x86", "armv6", "armv7", "armv8"]
