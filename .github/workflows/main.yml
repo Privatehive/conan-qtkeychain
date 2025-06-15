@@ -2,36 +2,85 @@ name: "Create Conan Package"
 on: push
 
 jobs:
-  build_linux:
+  build_linux_x86_64:
     name: "Linux"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
-      image: "ghcr.io/privatehive/conan-ubuntu:latest"
-      machine_type: c2d-standard-8
+      name: "x86_64"
+      image: "ubuntu-22.04"
       conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
 
-  build_windows:
+  build_windows_x86_64:
     name: "Windows"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
-      image: "ghcr.io/privatehive/conan-wine:latest"
-      machine_type: c2d-standard-8
+      name: "x86_64"
+      image: "windows-2022"
       conan_host_profile: "windowsMinGW"
       conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
 
-  build_android:
-    name: "Android"
+  build_linux_qt_host:
+    name: "Linux Qt Host"
     uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
     with:
-      image: "ghcr.io/privatehive/conan-ubuntu:latest"
-      machine_type: c2d-standard-8
+      name: "x86_64"
+      image: "ubuntu-22.04"
+      conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
+      conan_options: "qt/*:config=host"
+      export_conan_cache: true
+
+  build_android_x86:
+    name: "Android"
+    uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
+    needs: [ build_linux_qt_host ]
+    if: ${{ success() }}
+    with:
+      name: "x86"
+      image: "ubuntu-22.04"
+      conan_host_profile: "androidx86"
+      conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
+      import_conan_cache: true
+
+  build_android_x86_64:
+    name: "Android"
+    uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
+    needs: [ build_linux_qt_host ]
+    if: ${{ success() }}
+    with:
+      name: "x86_64"
+      image: "ubuntu-22.04"
+      conan_host_profile: "androidx86_64"
+      conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
+      import_conan_cache: true
+
+  build_android_armv7:
+    name: "Android"
+    uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
+    needs: [ build_linux_qt_host ]
+    if: ${{ success() }}
+    with:
+      name: "armv7"
+      image: "ubuntu-22.04"
+      conan_host_profile: "androidArmv7"
+      conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
+      import_conan_cache: true
+
+  build_android_armv8:
+    name: "Android"
+    uses: Privatehive/conan-workflows/.github/workflows/createPackage.yml@master
+    needs: [ build_linux_qt_host ]
+    if: ${{ success() }}
+    with:
+      name: "armv8"
+      image: "ubuntu-22.04"
       conan_host_profile: "androidArmv8"
       conan_remotes: https://conan.privatehive.de/artifactory/api/conan/public-conan
+      import_conan_cache: true
 
   upload_recipe:
     name: "Finalize"
     uses: Privatehive/conan-workflows/.github/workflows/uploadRecipe.yml@master
-    needs: [build_linux, build_windows, build_android]
+    needs: [ build_linux_x86_64, build_windows_x86_64, build_android_x86, build_android_x86_64, build_android_armv7, build_android_armv8 ]
     if: ${{ success() }}
     secrets: inherit
     with:
