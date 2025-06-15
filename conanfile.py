@@ -75,6 +75,7 @@ class QtKeychainConan(ConanFile):
         tc = CMakeToolchain(self, generator="Ninja")
         tc.variables["BUILD_WITH_QT6"] = True
         tc.variables["BUILD_SHARED_LIBS"] = self.options.shared
+        tc.variables["LIBSECRET_SUPPORT"] = False
         tc.generate()
         ms.generate()
 
