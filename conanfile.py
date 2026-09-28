@@ -69,7 +69,7 @@ class QtKeychainConan(ConanFile):
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], destination="keychain", strip_root=True)
-        patch(self, base_path="keychain", patch_file="patches/android_so_names.patch")
+        #patch(self, base_path="keychain", patch_file="patches/android_so_names.patch")
 
     def generate(self):
         ms = VirtualBuildEnv(self)
@@ -77,6 +77,7 @@ class QtKeychainConan(ConanFile):
         tc.variables["BUILD_WITH_QT6"] = True
         tc.variables["BUILD_SHARED_LIBS"] = self.options.shared
         tc.variables["LIBSECRET_SUPPORT"] = False
+        tc.variables["BUILD_TESTING"] = False
         tc.generate()
         ms.generate()
 
